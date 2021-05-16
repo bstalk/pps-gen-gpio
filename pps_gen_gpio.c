@@ -184,6 +184,7 @@ static int pps_gen_gpio_probe(struct platform_device *pdev)
 	int ret;
 	struct device *dev = &pdev->dev;
 	struct pps_gen_gpio_devdata *devdata;
+	int num_gpios;
 
 	/* Allocate space for device info. */
 	devdata = devm_kzalloc(dev,
@@ -195,11 +196,12 @@ static int pps_gen_gpio_probe(struct platform_device *pdev)
 	}
 
 	/* There should be a single PPS generator GPIO pin defined in DT. */
-	if (of_gpio_named_count(dev->of_node, "pps-gen-gpio") != 1) {
-		dev_err(dev, "There should be exactly one pps-gen GPIO defined in DT\n");
+	if ((num_gpios = of_gpio_named_count(dev->of_node, "pps-gen-gpios")) != 1) {
+		dev_err(dev, "There should be exactly one pps-gen GPIO defined in DT [%d]\n", num_gpios);
 		ret = -EINVAL;
 		goto err_dt;
 	}
+	pr_info("found %d GPIOS defined in DT\n", num_gpios);
 
 	devdata->pps_gpio = devm_gpiod_get(dev, "pps-gen", GPIOD_OUT_LOW);
 	if (IS_ERR(devdata->pps_gpio)) {
