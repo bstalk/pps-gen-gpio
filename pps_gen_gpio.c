@@ -196,7 +196,7 @@ static int pps_gen_gpio_probe(struct platform_device *pdev)
 	}
 
 	/* There should be a single PPS generator GPIO pin defined in DT. */
-	if ((num_gpios = of_gpio_named_count(dev->of_node, "pps-gen-gpios")) != 1) {
+	if ((num_gpios = of_gpio_named_count(dev->of_node, "pps-gen-gpio")) != 1) {
 		dev_err(dev, "There should be exactly one pps-gen GPIO defined in DT [%d]\n", num_gpios);
 		ret = -EINVAL;
 		goto err_dt;
